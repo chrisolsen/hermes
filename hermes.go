@@ -2,9 +2,9 @@ package hermes
 
 import (
 	"bytes"
-	"github.com/Masterminds/sprig"
-	"github.com/imdario/mergo"
 	"html/template"
+
+	"github.com/imdario/mergo"
 )
 
 // Hermes is an instance of the hermes email generator
@@ -143,7 +143,7 @@ func (h *Hermes) GenerateHTML(email Email) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return h.generateTemplate(email, h.Theme.HTMLTemplate())
+	return h.generateTemplate(email, h.Theme.HTMLTemplate(), nil)
 }
 
 // GeneratePlainText generates the email body from data
@@ -154,10 +154,10 @@ func (h *Hermes) GeneratePlainText(email Email) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return h.generateTemplate(email, h.Theme.PlainTextTemplate())
+	return h.generateTemplate(email, h.Theme.PlainTextTemplate(), nil)
 }
 
-func (h *Hermes) generateTemplate(email Email, tplt string) (string, error) {
+func (h *Hermes) generateTemplate(email Email, tplt string, funcMap template.FuncMap) (string, error) {
 
 	err := setDefaultEmailValues(&email)
 	if err != nil {
@@ -165,8 +165,11 @@ func (h *Hermes) generateTemplate(email Email, tplt string) (string, error) {
 	}
 
 	// Generate the email from Golang template
-	// Allow usage of simple function from sprig : https://github.com/Masterminds/sprig
-	t, err := template.New("hermes").Funcs(sprig.FuncMap()).Parse(tplt)
+	t := template.New("hermes")
+	if funcMap != nil {
+		t = t.Funcs(funcMap)
+	}
+	t, err = t.Parse(tplt)
 	if err != nil {
 		return "", err
 	}
