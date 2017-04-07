@@ -21,6 +21,12 @@ type Theme interface {
 	PlainTextTemplate() string // The golang templte for plain text emails (can be basic HTML)
 }
 
+type Style struct {
+	BackgroundColor string
+	TextColor       string
+	TextSize        string
+}
+
 // TextDirection of the text in HTML email@
 type TextDirection string
 
@@ -34,6 +40,7 @@ const TDRightToLeft TextDirection = "rtl"
 // Appears in header & footer of e-mails
 type Product struct {
 	Name      string
+	Style     Style
 	Link      string // e.g. https://matcornic.github.io
 	Logo      string // e.g. https://matcornic.github.io/img/logo.png
 	Copyright string // Copyright © 2017 Hermes. All rights reserved.
@@ -122,6 +129,11 @@ func setDefaultHermesValues(h *Hermes) error {
 		Product: Product{
 			Name:      "Hermes",
 			Copyright: "Copyright © 2017 Hermes. All rights reserved.",
+			Style: Style{
+				BackgroundColor: "#F2F4F6",
+				TextColor:       "#2F3133",
+				TextSize:        "16px",
+			},
 		},
 	}
 	// Merge the given hermes engine configuration with default one

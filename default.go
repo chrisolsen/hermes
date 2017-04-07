@@ -49,6 +49,11 @@ func (dt *Default) HTMLTemplate() string {
     }
     /* Masthead ----------------------- */
     .email-masthead {
+      {{with .Hermes.Product.Style}}
+      background-color: {{.BackgroundColor}};
+      color: {{.TextColor}};
+      font-size: {{.TextSize}};
+      {{end}}
       padding: 25px 0;
       text-align: center;
     }
@@ -57,9 +62,12 @@ func (dt *Default) HTMLTemplate() string {
       border: 0;
     }
     .email-masthead_name {
-      font-size: 16px;
       font-weight: bold;
-      color: #2F3133;
+      {{with .Hermes.Product.Style}}
+      background-color: {{.BackgroundColor}};
+      color: {{.TextColor}};
+      font-size: {{.TextSize}};
+      {{end}}
       text-decoration: none;
       text-shadow: 0 1px 0 white;
     }
